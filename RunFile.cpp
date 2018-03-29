@@ -59,7 +59,7 @@ using namespace std;
 			theCustomer.BuildCustomer( clockTick, timeOfService );
 
 			/* put the customer into the queue */
-			theVirtualLine.
+			//theVirtualLine.
 
 		}
 	}
