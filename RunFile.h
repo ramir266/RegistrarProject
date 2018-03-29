@@ -1,4 +1,5 @@
 #include <string>
+#include "Customer.h"
 
 using namespace std;
 
@@ -14,5 +15,9 @@ public:
 	int numberOfStudents;
 	int timeOfService;
 	int clockTick;
+
+	Customer* *serviceWindow;
+
+	DoublyLinkedList<Customer*> theVirtualLine;
 
 };

@@ -33,7 +33,11 @@ class DoublyLinkedList
 		//returns T* and views back of the list
 		T* peekBack();
 
+		//print out the list
+		T* printList();
+
 		unsigned int getSize();
+
 		bool isEmpty(); //true if list is empty 
 };
 
@@ -159,6 +163,19 @@ template <class T>
 T* DoublyLinkedList<T>::peekBack()
 {
 	return back->data;
+}
+
+template <class T>
+T* DoublyLinkedList<T>::printList()
+{
+	ListNode<T> *current = front;
+	while( true )
+	{
+		if ( current == NULL )
+			break;
+		cout << current->data << endl;
+		current = current->next;
+	}
 }
 
 template <class T>

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Customer.h"
 
-with namespace std;
+using namespace std;
 
 Customer::Customer()
 {
@@ -12,7 +12,7 @@ Customer::Customer()
 
 Customer::~Customer(){}
 
-Customer::BuildCustomer( int inTimeInLine, int inTimeService )
+void Customer::BuildCustomer( int inTimeInLine, int inTimeService )
 {
 	timeInLine = inTimeInLine;			// clock tick that customer entered the queue
 	timeService = inTimeService;		// amount of time customer needs at the window

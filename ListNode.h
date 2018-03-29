@@ -23,14 +23,3 @@ ListNode<T>::ListNode()
 	prev = NULL;
 	next = NULL;
 }
-
-template <class T>
-ListNode<T>::ListNode(T* d)
-{
-	data = d;
-	prev = NULL;
-	next = NULL;
-}
-
-template <class T>
-ListNode<T>::~ListNode(){}
