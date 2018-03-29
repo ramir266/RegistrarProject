@@ -18,6 +18,6 @@ public:
 
 	Customer* *serviceWindow;
 
-	DoublyLinkedList<Customer*> theVirtualLine;
+	//DoublyLinkedList<Customer*> theVirtualLine;
 
 };

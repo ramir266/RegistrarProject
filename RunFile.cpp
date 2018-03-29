@@ -22,6 +22,22 @@ using namespace std;
 		+ once a length of service is retrieved add entry to the queue of customers
 */
 
+RunFile::RunFile()
+{
+	numberOfWindows = 0;
+	numberOfStudents = 0;
+	timeOfService = 0;
+	clockTick = 0;
+}
+
+RunFile::~RunFile(){}
+void RunFile::read( string inFile )
+{
+	fstream simFile;
+	string inLine;
+
+	simFile.open(inFile.c_str());
+
 	// number of windows
 	getline( simFile, inLine );
 	numberOfWindows = stoi( inLine );
@@ -55,8 +71,8 @@ using namespace std;
 			cout << "Time of Service: " << timeOfService << endl;
 			
 			/* build virtual line but first create customer. */
-			Customer* theCustomer = new Customer();
-			theCustomer.BuildCustomer( clockTick, timeOfService );
+			//Customer* theCustomer = new Customer();
+			//theCustomer.BuildCustomer( clockTick, timeOfService );
 
 			/* put the customer into the queue */
 			//theVirtualLine.
