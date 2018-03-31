@@ -4,7 +4,7 @@
 using namespace std;
 
 template <class T>
-class DoublyLinkedList
+class DoublyLinkedList : public List<T>
 {
 	private: 
 		ListNode<T> *front; //pointer to front of list
@@ -16,29 +16,29 @@ class DoublyLinkedList
 		~DoublyLinkedList();
 
 		//inserts T* at the front of the list
-		void insertFront(T* d);
+		virtual void insertFront(T* d);
 		
 		//inserts T* at the back of the list 
-		void insertBack(T* d);
+		virtual void insertBack(T* d);
 
 		//return T* and remove from the front of the list 
-		T* removeFront();
+		virtual T* removeFront();
 
 		//return T* and remove from the back of the list
-		T* removeBack();
+		virtual T* removeBack();
 
 		//returns T* and views front of the list
-		T* peekFront();
+		virtual T* peekFront();
 
 		//returns T* and views back of the list
-		T* peekBack();
+		virtual T* peekBack();
 
 		//print out the list
-		T* printList();
+		virtual T* printList();
 
-		unsigned int getSize();
+		virtual unsigned int getSize();
 
-		bool isEmpty(); //true if list is empty 
+		virtual bool isEmpty(); //true if list is empty 
 };
 
 template <class T>
@@ -72,7 +72,7 @@ DoublyLinkedList<T>::~DoublyLinkedList()
 }
 
 template <class T>
-void DoublyLinkedList<T>::insertFront(T* d)
+virtual void DoublyLinkedList<T>::insertFront(T* d)
 {
 	ListNode<T> *node = new ListNode<T>(d);
 
@@ -92,7 +92,7 @@ void DoublyLinkedList<T>::insertFront(T* d)
 }
 
 template <class T>
-void DoublyLinkedList<T>::insertBack(T* d)
+virtual void DoublyLinkedList<T>::insertBack(T* d)
 {
 	ListNode<T> *node = new ListNode<T>(d);
 
@@ -110,7 +110,7 @@ void DoublyLinkedList<T>::insertBack(T* d)
 }
 
 template <class T> 
-T* DoublyLinkedList<T>::removeFront()
+virtual T* DoublyLinkedList<T>::removeFront()
 {
 	ListNode<T> *temp = front;
 
@@ -132,7 +132,7 @@ T* DoublyLinkedList<T>::removeFront()
 }
 
 template <class T>
-T* DoublyLinkedList<T>::removeBack()
+virtual T* DoublyLinkedList<T>::removeBack()
 {
 	ListNode<T> *temp = back;
 
@@ -154,19 +154,19 @@ T* DoublyLinkedList<T>::removeBack()
 }
 
 template <class T>
-T* DoublyLinkedList<T>::peekFront()
+virtual T* DoublyLinkedList<T>::peekFront()
 {
 	return front->data;
 }
 
 template <class T>
-T* DoublyLinkedList<T>::peekBack()
+virtual T* DoublyLinkedList<T>::peekBack()
 {
 	return back->data;
 }
 
 template <class T>
-T* DoublyLinkedList<T>::printList()
+virtual T* DoublyLinkedList<T>::printList()
 {
 	ListNode<T> *current = front;
 	while( true )
@@ -179,7 +179,7 @@ T* DoublyLinkedList<T>::printList()
 }
 
 template <class T>
-unsigned int DoublyLinkedList<T>::getSize()
+virtual unsigned int DoublyLinkedList<T>::getSize()
 {
 	return size;
 }
@@ -187,12 +187,7 @@ unsigned int DoublyLinkedList<T>::getSize()
 
 // !!!!!!!!! HELP HERE !!!!!!!
 template <class T>
-bool DoublyLinkedList<T>::isEmpty()
+virtual bool DoublyLinkedList<T>::isEmpty()
 {
 	return (size == 0);
-
-	//or 
-
-	return (front->next == prev); //is list empty?
-
 }
