@@ -47,6 +47,7 @@ int main( int argc, char** argv)
 	cout << "Ready to process  -  Simulation file: " << inFile << endl;
 
 	rf.read( inFile );
+	rf.simulation();
 
 	return 0;
 
