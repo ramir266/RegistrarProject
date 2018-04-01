@@ -1,23 +1,30 @@
 #include <string>
 #include "Customer.h"
+#include "GenQueue.h"
 
 using namespace std;
 
 class RunFile
 {
-public:
-	RunFile();
-	~RunFile();
+	public:
+		RunFile();
+		~RunFile();
 
-	void read( string inFile );
+		void read(string inFile);
+		void simulation();
 
-	int numberOfWindows;
-	int numberOfStudents;
-	int timeOfService;
-	int clockTick;
+		int numberOfOpenWindows;
+		int numberOfStudents;
+		int timeOfService;
+		int clockTick;
 
-	Customer* *serviceWindow;
+		//Customer* *serviceWindow; //pointing whats at in the linked list 
+		int *serviceWindows;
+		int *idleTime;
 
-	//DoublyLinkedList<Customer*> theVirtualLine;
+		//creating queue of type customer
+		GenQueue<Customer> *testQueue = new GenQueue<Customer>();
+
+		//DoublyLinkedList<Customer*> theVirtualLine;
 
 };
