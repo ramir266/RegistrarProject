@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <algorithm>
 #include <array>
 #include "RunFile.h"
 //#include "GenQueue.h"
@@ -35,6 +36,7 @@ RunFile::~RunFile(){}
 void RunFile::read( string inFile )
 {
 	//GenQueue<Customer> *testQueue = new GenQueue<Customer>();
+	totalNumberOfCustomers = 0;
 
 	fstream simFile;
 	string inLine;
@@ -56,7 +58,7 @@ void RunFile::read( string inFile )
 	}*/
 
 	serviceWindows = new int[numberOfOpenWindows];				// defined service window array and define limits
-
+	serviceWindowIdleTime = new int[numberOfOpenWindows];		// service window idle time array
 
 	for ( int i = 1; i <= numberOfOpenWindows; ++i )					// create the empty array
 	{
@@ -84,6 +86,7 @@ void RunFile::read( string inFile )
 			/* build virtual line but first create customer. */
 			Customer* theCustomer = new Customer();
 			theCustomer->BuildCustomer( clockTick, timeOfService );
+			totalNumberOfCustomers++;
 			cout<<"This is the specific customer's clock tick: " << theCustomer->timeInLine<<endl;
 			cout<<"This is the specific customer's length of service: "<< theCustomer->timeService<<endl;
 			cout<<"This is the specific customer's waiting time: "<< theCustomer->timeWaiting<<endl;
@@ -93,6 +96,13 @@ void RunFile::read( string inFile )
 			cout<<testQueue->getSize()<<endl;
 		}
 	}
+
+	cout << "total students in queue: " << totalNumberOfCustomers << endl;
+	customerWaitTime = new int[totalNumberOfCustomers];
+	for (int i = 0; i <= totalNumberOfCustomers; i++)
+		{
+			customerWaitTime[i] = 0;
+		}
 }
 
 void RunFile::simulation()
@@ -100,7 +110,10 @@ void RunFile::simulation()
 	int clock = 0;
 	bool finished = false; 
 	int emptyWindows = numberOfOpenWindows;  // iniialize emptyWindows to be number of windows
+	// initialize statistics variables
 	numberCustomers = 0;
+	totalWindowIdleTime = 0;
+	longestWindowIdleTime = 0;
 
 	while(finished != true)
 	{
@@ -122,13 +135,15 @@ void RunFile::simulation()
 							// statistics for how long customer was waiting in line
 							emptyWindows--;
 							numberCustomers++;
-							totalWaitTime =+ (clock - temp1->timeInLine);
+							totalWaitTime += (clock - temp1->timeInLine);
+							customerWaitTime[numberCustomers] = clock - temp1->timeInLine;
 							cout << "Customer entered window number: " << i << endl;
+							cout << "Customer wait time was: " << clock - temp1->timeInLine << endl;
 							//cout << "Number of empty windows: " << emptyWindows << endl;
 						}
 						else 
 						{
-							cout << "Break out of for loop\n";
+							cout << "No customers available to serve at this time\n";
 							continue;
 						}
 						cout<<"Window "<< i <<" occupied for: "<< serviceWindows[i] <<endl;
@@ -147,17 +162,18 @@ void RunFile::simulation()
 			if(serviceWindows[i]!=0)
 			{
 				serviceWindows[i]--;
-				cout << "new time of service for window " << i << " : " << serviceWindows[i] << endl;
+				cout << "time left for window " << i << " : " << serviceWindows[i] << endl;
 				if (serviceWindows[i] == 0)
 				{
 					emptyWindows++;
 					//statistics here
-					cout << "incremented emptyWindows to: " << emptyWindows << endl;
+					cout << "emptyWindows = " << emptyWindows << endl;
 				}				
 			}
 			else
 			{
 				//increment the serviceWindowIdleTime count serviceWindowIdleTime[i]
+				serviceWindowIdleTime[i]++;
 			}
 		}
 
@@ -168,15 +184,61 @@ void RunFile::simulation()
 		{
 			finished = true;
 			cout  << "Did I get here?\n";
+			cout << "Time to calculate simulation statistics...\n";
 			//cout<<"Empty Windows: "<<emptyWindows<<"\nOpen Windows: "<<numberOfOpenWindows<<endl;
 			cout << "Number of customers served: " << numberCustomers << endl;
-			cout << "Total Wait Time: " << totalWaitTime << endl;
+			//cout << "Total Wait Time: " << totalWaitTime << endl;
 			cout << "Mean wait time: " << (float)totalWaitTime/(float)numberCustomers << endl;
+			double medianCustomer = 0;
+			medianCustomer = showMedian( customerWaitTime, totalNumberOfCustomers);
+			cout << "Median customer wait time: " << medianCustomer << endl;
+			for(int i = 1; i <= totalNumberOfCustomers; i++)
+			{
+				if ( longestCustomerWaitTime < customerWaitTime[i] )
+					longestCustomerWaitTime = customerWaitTime[i];
+				cout << i << " : " << customerWaitTime[i] << endl;
+			}
+			cout << "Longest customer wait time: " << longestCustomerWaitTime << endl;
+			for(int i = 1; i <= numberOfOpenWindows; i++)
+			{
+				cout << "Window " << i << " idle time: " << serviceWindowIdleTime[i] << endl;
+				totalWindowIdleTime += serviceWindowIdleTime[i];
+				//cout << "total: " << totalWindowIdleTime << endl;;
+				if (longestWindowIdleTime < serviceWindowIdleTime[i])
+				{
+					longestWindowIdleTime = serviceWindowIdleTime[i];
+				}
+			}
+			cout << "Total window idle time: " << totalWindowIdleTime << endl;
+			cout << "Mean window idle time: " << (float)totalWindowIdleTime / (float)numberOfOpenWindows << endl;
+			cout << "Longest window idle time: " << longestWindowIdleTime << endl;
 		}
 
 		// just to catch runaways...
 		if (clock == 50)
 			break;
 	}
+}
 
+double RunFile::showMedian(int *array, int size)
+{
+    int middle;
+    double average, median;
+ 
+ 	sort(array, array + size);
+
+    middle = size / 2.0;
+ 
+    if (size % 2)
+    {
+        median = (array[middle] + array[middle + 1]) / 2.0;
+        cout << "The median is: " << average << endl;
+    }
+    else
+    {
+        median = array[middle + 0] / 1.0;
+ 
+        cout << "The median is: " << median << endl;
+    }
+    return median;
 }
