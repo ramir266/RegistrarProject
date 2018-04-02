@@ -118,6 +118,7 @@ void RunFile::simulation()
 						{
 							Customer* temp1 = testQueue->dequeue();  
 							serviceWindows[i] = temp1->timeService+1;
+							// statistics for how long customer was waiting in line
 							emptyWindows--;
 							cout << "Customer entered window number: " << i << endl;
 							//cout << "Number of empty windows: " << emptyWindows << endl;
@@ -145,6 +146,7 @@ void RunFile::simulation()
 				if (serviceWindows[i] == 0)
 				{
 					emptyWindows++;
+					//statistics here
 					cout << "incremented emptyWindows to: " << emptyWindows << endl;
 				}
 				
