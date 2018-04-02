@@ -143,7 +143,7 @@ void RunFile::simulation()
 						}
 						else 
 						{
-							cout << "No customers available to serve at this time\n";
+							cout << "No customers available for Window " << i << endl;
 							continue;
 						}
 						cout<<"Window "<< i <<" occupied for: "<< serviceWindows[i] <<endl;
@@ -162,7 +162,7 @@ void RunFile::simulation()
 			if(serviceWindows[i]!=0)
 			{
 				serviceWindows[i]--;
-				cout << "time left for window " << i << " : " << serviceWindows[i] << endl;
+				cout << "Window " << i << " time remaining : " << serviceWindows[i] << endl;
 				if (serviceWindows[i] == 0)
 				{
 					emptyWindows++;
@@ -215,8 +215,8 @@ void RunFile::simulation()
 		}
 
 		// just to catch runaways...
-		if (clock == 50)
-			break;
+		//if (clock == 50)
+		//	break;
 	}
 }
 
