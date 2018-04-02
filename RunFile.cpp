@@ -155,6 +155,10 @@ void RunFile::simulation()
 					cout << "incremented emptyWindows to: " << emptyWindows << endl;
 				}				
 			}
+			else
+			{
+				//increment the serviceWindowIdleTime count serviceWindowIdleTime[i]
+			}
 		}
 
 		// increment the clock
