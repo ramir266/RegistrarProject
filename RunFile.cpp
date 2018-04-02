@@ -58,7 +58,7 @@ void RunFile::read( string inFile )
 	serviceWindows = new int[numberOfOpenWindows];				// defined service window array and define limits
 
 
-	for ( int i = 0; i < numberOfOpenWindows; ++i )					// create the empty array
+	for ( int i = 1; i <= numberOfOpenWindows; ++i )					// create the empty array
 	{
 		serviceWindows[ i ] = 0;
 	}
@@ -99,24 +99,59 @@ void RunFile::simulation()
 {
 	int clock = 0;
 	bool finished = false; 
-	int emptyWindows = 0;
+	int emptyWindows = numberOfOpenWindows;  // iniialize emptyWindows to be number of windows
 
 	while(finished != true)
 	{
-		clock++;
 		//declaring the intial time
 		cout<<"Clock Tick: "<<clock<<endl;
-		for(int i = 0; i < numberOfOpenWindows; ++i) //array of open windows
+
+		if(!testQueue->isEmpty()) //checking whether queue of students is emptY
 		{
-			if(!testQueue->isEmpty() && serviceWindows[i] == 0) //checking whether queue of students is empty and window vacant
+			if(testQueue->peekFront()->timeInLine <= clock) // peek at customer at head to see timeInLine
 			{
-				Customer* temp1 = testQueue->dequeue(); //creating a temp customer and assigning it to the cust on front of line
-				if(clock = temp1->timeInLine)
-				{
-					serviceWindows[i] = temp1->timeService; //setting first OPEN window equal to temp1 time needed of service 
-					//cout<<"Window "<<i+1<<" occupied for: "<< serviceWindows[i]<<"\n Student time need: "<< temp1->timeService <<endl;
+				if (emptyWindows > 0)		//NEED TO CHECK IF OPEN WINDOW
+				{	
+					for(int i = 1; i <= numberOfOpenWindows; ++i) //array of open windows
+					{
+						if(serviceWindows[i] == 0 && !testQueue->getSize() == 0 && testQueue->peekFront()->timeInLine <= clock)
+						{
+							Customer* temp1 = testQueue->dequeue();  
+							serviceWindows[i] = temp1->timeService+1;
+							emptyWindows--;
+							cout << "Customer entered window number: " << i << endl;
+							//cout << "Number of empty windows: " << emptyWindows << endl;
+						}
+						else 
+						{
+							cout << "Break out of for loop\n";
+							continue;
+						}
+						cout<<"Window "<< i <<" occupied for: "<< serviceWindows[i] <<endl;
+					}
 				}
 			}
+			else
+			{
+				cout << "No customers at clock tick: " << clock << endl;
+			}
+		}
+		for(int i = 1; i <= numberOfOpenWindows; i++)
+		{
+			if(serviceWindows[i]!=0)
+			{
+				serviceWindows[i]--;
+				cout << "new time of service for window " << i << " : " << serviceWindows[i] << endl;
+				if (serviceWindows[i] == 0)
+				{
+					emptyWindows++;
+					cout << "incremented emptyWindows to: " << emptyWindows << endl;
+				}
+				
+			}
+		}
+		clock++;	
+			/*
 			else  // what's happening here?
 			{
 				if(serviceWindows[i] == 0)
@@ -125,15 +160,21 @@ void RunFile::simulation()
 				}
 				else
 					serviceWindows[i]--; 
-			}
-			cout<<"Window "<<i+1<<" occupied for: "<< serviceWindows[i] <<endl;
-		}
+			}*/
+		/*if( testQueue->isEmpty() == true)
+		{
+			cout << "Reached the end of the queue!\n";
+		}*/
 
-		if(emptyWindows == numberOfOpenWindows)
+		if(emptyWindows == numberOfOpenWindows && testQueue->isEmpty() == true)
 		{
 			finished = true;
-			cout<<"Empty Windows: "<<emptyWindows<<"\nOpen Windows: "<<numberOfOpenWindows<<endl;
+			cout  << "Did I get here?\n";
+			//cout<<"Empty Windows: "<<emptyWindows<<"\nOpen Windows: "<<numberOfOpenWindows<<endl;
 		}
+
+		if (clock == 40)
+			break;
 	}
 
 }
