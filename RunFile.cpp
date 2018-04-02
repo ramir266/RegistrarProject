@@ -100,6 +100,7 @@ void RunFile::simulation()
 	int clock = 0;
 	bool finished = false; 
 	int emptyWindows = numberOfOpenWindows;  // iniialize emptyWindows to be number of windows
+	numberCustomers = 0;
 
 	while(finished != true)
 	{
@@ -120,6 +121,8 @@ void RunFile::simulation()
 							serviceWindows[i] = temp1->timeService+1;
 							// statistics for how long customer was waiting in line
 							emptyWindows--;
+							numberCustomers++;
+							totalWaitTime =+ (clock - temp1->timeInLine);
 							cout << "Customer entered window number: " << i << endl;
 							//cout << "Number of empty windows: " << emptyWindows << endl;
 						}
@@ -137,6 +140,8 @@ void RunFile::simulation()
 				cout << "No customers at clock tick: " << clock << endl;
 			}
 		}
+
+		// decrement window timers
 		for(int i = 1; i <= numberOfOpenWindows; i++)
 		{
 			if(serviceWindows[i]!=0)
@@ -148,34 +153,25 @@ void RunFile::simulation()
 					emptyWindows++;
 					//statistics here
 					cout << "incremented emptyWindows to: " << emptyWindows << endl;
-				}
-				
+				}				
 			}
 		}
+
+		// increment the clock
 		clock++;	
-			/*
-			else  // what's happening here?
-			{
-				if(serviceWindows[i] == 0)
-				{
-					emptyWindows++;
-				}
-				else
-					serviceWindows[i]--; 
-			}*/
-		/*if( testQueue->isEmpty() == true)
-		{
-			cout << "Reached the end of the queue!\n";
-		}*/
 
 		if(emptyWindows == numberOfOpenWindows && testQueue->isEmpty() == true)
 		{
 			finished = true;
 			cout  << "Did I get here?\n";
 			//cout<<"Empty Windows: "<<emptyWindows<<"\nOpen Windows: "<<numberOfOpenWindows<<endl;
+			cout << "Number of customers served: " << numberCustomers << endl;
+			cout << "Total Wait Time: " << totalWaitTime << endl;
+			cout << "Mean wait time: " << (float)totalWaitTime/(float)numberCustomers << endl;
 		}
 
-		if (clock == 40)
+		// just to catch runaways...
+		if (clock == 50)
 			break;
 	}
 

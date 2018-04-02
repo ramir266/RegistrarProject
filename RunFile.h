@@ -18,6 +18,10 @@ class RunFile
 		int timeOfService;
 		int clockTick;
 
+		//statistics variables
+		int numberCustomers;
+		int totalWaitTime;
+
 		//Customer* *serviceWindow; //pointing whats at in the linked list 
 		int *serviceWindows;
 		int *idleTime;
