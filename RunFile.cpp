@@ -50,7 +50,6 @@ void RunFile::read( string inFile )
 
 	// create array of windows
 	/*serviceWindow = new Customer*[numberOfWindows];				// defined service window array and define limits
-
 	for ( int i = 0; i < numberOfWindows; ++i )					// create the empty array
 	{
 		Customer* windowCustomer = new Customer();
@@ -89,7 +88,7 @@ void RunFile::read( string inFile )
 			totalNumberOfCustomers++;
 			cout<<"This is the specific customer's clock tick: " << theCustomer->timeInLine<<endl;
 			cout<<"This is the specific customer's length of service: "<< theCustomer->timeService<<endl;
-			cout<<"This is the specific customer's waiting time: "<< theCustomer->timeWaiting<<endl;
+			//cout<<"This is the specific customer's waiting time: "<< theCustomer->timeWaiting<<endl;
 
 			//putting customers into queue
 			testQueue->enqueue(theCustomer);
@@ -100,9 +99,9 @@ void RunFile::read( string inFile )
 	cout << "total students in queue: " << totalNumberOfCustomers << endl;
 	customerWaitTime = new int[totalNumberOfCustomers];
 	for (int i = 0; i <= totalNumberOfCustomers; i++)
-		{
-			customerWaitTime[i] = 0;
-		}
+	{
+		customerWaitTime[i] = 0;
+	}
 }
 
 void RunFile::simulation()
@@ -110,6 +109,10 @@ void RunFile::simulation()
 	int clock = 0;
 	bool finished = false; 
 	int emptyWindows = numberOfOpenWindows;  // iniialize emptyWindows to be number of windows
+	int custOverTen = 0;
+	int windOverTen = 0;
+
+	
 	// initialize statistics variables
 	numberCustomers = 0;
 	totalWindowIdleTime = 0;
@@ -192,13 +195,25 @@ void RunFile::simulation()
 			double medianCustomer = 0;
 			medianCustomer = showMedian( customerWaitTime, totalNumberOfCustomers);
 			cout << "Median customer wait time: " << medianCustomer << endl;
+			
 			for(int i = 1; i <= totalNumberOfCustomers; i++)
 			{
 				if ( longestCustomerWaitTime < customerWaitTime[i] )
+				{
 					longestCustomerWaitTime = customerWaitTime[i];
+				}
+
 				cout << i << " : " << customerWaitTime[i] << endl;
+
+				if(customerWaitTime[i] >= 10) //checks amount of students over ten minutes
+				{
+					custOverTen++;
+				}
 			}
-			cout << "Longest customer wait time: " << longestCustomerWaitTime << endl;
+			
+			cout << "Longest customer wait time: " << longestCustomerWaitTime << endl;			
+			cout <<"The number of students waiting over ten minutes: "<<custOverTen<<endl;
+			
 			for(int i = 1; i <= numberOfOpenWindows; i++)
 			{
 				cout << "Window " << i << " idle time: " << serviceWindowIdleTime[i] << endl;
@@ -208,10 +223,18 @@ void RunFile::simulation()
 				{
 					longestWindowIdleTime = serviceWindowIdleTime[i];
 				}
+
+				if (serviceWindowIdleTime[i] >= 5)
+				{
+					windOverTen++;
+				}
 			}
 			cout << "Total window idle time: " << totalWindowIdleTime << endl;
 			cout << "Mean window idle time: " << (float)totalWindowIdleTime / (float)numberOfOpenWindows << endl;
 			cout << "Longest window idle time: " << longestWindowIdleTime << endl;
+			cout << "Number of windows idle for over 5 minutes: " <<windOverTen<<endl;
+
+			
 		}
 
 		// just to catch runaways...
@@ -222,8 +245,9 @@ void RunFile::simulation()
 
 double RunFile::showMedian(int *array, int size)
 {
-    int middle;
-    double average, median;
+    //http://www.cplusplus.com/articles/NhA0RXSz/
+	int middle = 0;
+    double median = 0;
  
  	sort(array, array + size);
 
@@ -232,12 +256,11 @@ double RunFile::showMedian(int *array, int size)
     if (size % 2)
     {
         median = (array[middle] + array[middle + 1]) / 2.0;
-        cout << "The median is: " << average << endl;
+        cout << "The median is: " << median << endl;
     }
     else
     {
         median = array[middle + 0] / 1.0;
- 
         cout << "The median is: " << median << endl;
     }
     return median;
